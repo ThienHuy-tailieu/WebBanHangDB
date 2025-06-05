@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebBanHang.Areas.Customer.Models;
 using WebBanHang.Models;
 namespace WebBanHang.Controllers
-{
+{   
+    [Area("Admin")]
     [Authorize(Roles =SD.Role_Admin)]
     public class CategoryController : Controller
     {
@@ -16,7 +18,7 @@ namespace WebBanHang.Controllers
         {
             _db = db;        
         }
-        //action Index() : tra ve giao dien quan ly the loai
+        
         public IActionResult Index()
         {
             var listCategory = _db.Categories.ToList();
