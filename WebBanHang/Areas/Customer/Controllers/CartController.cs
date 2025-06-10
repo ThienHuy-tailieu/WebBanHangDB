@@ -16,6 +16,8 @@ namespace WebBanHang.Areas.Customer.Controllers
         {
             _db = db;
         }
+
+        //hiển thị giao diện quản lý giỏ hàng
         public IActionResult Index()
         {
             Cart cart = HttpContext.Session.GetJson<Cart>("CART");
@@ -25,7 +27,8 @@ namespace WebBanHang.Areas.Customer.Controllers
             }
             return View(cart);
         }
-        //action: xử lý thêm sản phẩm vào giỏ hàng
+
+        //xử lý thêm sản phẩm vào giỏ hàng
         public IActionResult AddToCart(int productId)
         {
             var product = _db.Products.FirstOrDefault(x => x.Id == productId);
@@ -43,7 +46,8 @@ namespace WebBanHang.Areas.Customer.Controllers
             }
             return Json(new { msg = "error" });
         }
-        //action: xử lý cập nhật số lượng
+
+        //xử lý cập nhật số lượng
         public IActionResult Update(int productId, int qty)
         {
             var product = _db.Products.FirstOrDefault(x => x.Id == productId);
@@ -61,7 +65,8 @@ namespace WebBanHang.Areas.Customer.Controllers
 
             return Json(new { msg = "error" });
         }
-        //action: xử lý xoá sản phẩm trong giỏ hàng
+
+        //xử lý xoá sản phẩm trong giỏ hàng
         public IActionResult Remove(int productId)
         {
             var product = _db.Products.FirstOrDefault(x => x.Id == productId);
@@ -78,6 +83,8 @@ namespace WebBanHang.Areas.Customer.Controllers
             }
             return NotFound();
         }
+
+        //ajax
         public IActionResult AddToCartAPI(int productId)
         {
             var product = _db.Products.FirstOrDefault(x => x.Id == productId);

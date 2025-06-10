@@ -32,8 +32,7 @@ namespace WebBanHang.Controllers
             var dsSanPham = _db.Products.Include(x => x.Category).ToList();
             //truyen du lieu cho View 
             ViewBag.PageSum = Math.Ceiling((double)dsSanPham.Count / pageSize);
-            ViewBag.CurrentPage = currentPage;
-            
+            ViewBag.CurrentPage = currentPage;            
             return View(dsSanPham.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList());
         }
         public IActionResult Delete(int id)

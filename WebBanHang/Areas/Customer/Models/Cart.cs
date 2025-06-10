@@ -6,12 +6,15 @@ using WebBanHang.Models;
 
 namespace WebBanHang.Areas.Customer.Models
 {
+    //lớp biểu diễn 1 phần tử của giỏ hàng
     public class CartItem
     {
+
         public Product Product { get; set; }
         public int Quantity { get; set; }
     }
-    //lớp biểu diễn giỏ hàng
+
+    // lớp biểu diễn giỏ hàng
     public class Cart
     {
         private List<CartItem> _items;
@@ -20,8 +23,8 @@ namespace WebBanHang.Areas.Customer.Models
             _items = new List<CartItem>();
         }
         public List<CartItem> Items { get { return _items; } }
-        //--------cac phuong thuc xu ly tren Giỏ hàng-----------
-        //phuong thuc them 1 san pham vào giỏ
+
+        //thêm sản phẩm vào giỏ
         public void Add(Product p, int qty)
         {
             var item = _items.FirstOrDefault(x => x.Product.Id == p.Id);
@@ -34,7 +37,8 @@ namespace WebBanHang.Areas.Customer.Models
                 item.Quantity += qty;
             }
         }
-        //phuong thuc cập nhật số lượng
+
+        //cập nhật số lượng
         public void Update(int productId, int qty)
         {
             var item = _items.FirstOrDefault(x => x.Product.Id == productId);
@@ -50,7 +54,8 @@ namespace WebBanHang.Areas.Customer.Models
                 }
             }
         }
-        //phuong thuc xóa sản phẩm
+
+        //xóa sản phẩm khỏi giỏ hàng
         public void Remove(int productId)
         {
             var item = _items.FirstOrDefault(x => x.Product.Id == productId);
@@ -59,7 +64,8 @@ namespace WebBanHang.Areas.Customer.Models
                 _items.Remove(item);
             }
         }
-        //tính tổng thành tiền
+
+        //tính tổng thành tiền sản phẩm
         public double Total
         {
             get
@@ -69,6 +75,7 @@ namespace WebBanHang.Areas.Customer.Models
                 return total;
             }
         }
+
         //tính tổng số lượng sản phẩm
         public double Quantity
         {

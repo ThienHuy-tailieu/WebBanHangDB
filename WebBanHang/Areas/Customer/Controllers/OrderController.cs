@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebBanHang.Areas.Customer.Models;
 using WebBanHang.Models;
 
 namespace WebBanHang.Areas.Customer.Controllers
 {
+    [Area("Customer")]
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -32,20 +32,20 @@ namespace WebBanHang.Areas.Customer.Controllers
             Cart cart = HttpContext.Session.GetJson<Cart>("CART");
             if (ModelState.IsValid)
             {
-                //B1. Luu tru don hang------
-                //b.1.1. Them Order vào CSDL
+                //Lưu trữ đơn hàng
+                //b1 Thêm Order vào CSDL
 
-                //khoi tao don hang
+                //tạo đơn hàng
                 order.OrderDate = DateTime.Now;
                 order.Total = cart.Total;
                 order.State = "Pending";
-                //them Order vao CSDL
+                //thêm Order vào CSDL
                 _db.Orders.Add(order);
                 _db.SaveChanges();
-                //b.1.2. Them OrderDetail vào CSDL
-                foreach (var item in cart.Items) //duyet cac item trong Cart
+                //b2 Thêm OrderDetail vào CSDL
+                foreach (var item in cart.Items) //duyệt qua từng sản phẩm trong giỏ hàng
                 {
-                    //tao doi tuong OrderDetail
+                    //tạo đối tượng OrderDetail
                     var orderDetail = new OrderDetail
                     {
 
@@ -53,14 +53,14 @@ namespace WebBanHang.Areas.Customer.Controllers
                         ProductId = item.Product.Id,
                         Quantity = item.Quantity
                     };
-                    //them OrderDetail vao CSDL
+                    //them OrderDetail vào CSDL
                     _db.OrderDetails.Add(orderDetail);
                     _db.SaveChanges();
 
                 }
-                //b2. xoa gio hang
+                //b3 xóa giỏ hàng
                 HttpContext.Session.Remove("CART");
-                //b3.tra ve view hien thi ket qua
+                //b4 trả về View kết quả
                 return View("Result");
             }
             //gửi cart qua View thông qua ViewBag

@@ -29,3 +29,4 @@ $(document).on("click", ".addtocart", function (evt) {
         }
     });
 })
+})
