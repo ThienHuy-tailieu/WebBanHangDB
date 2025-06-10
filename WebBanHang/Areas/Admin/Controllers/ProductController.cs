@@ -25,19 +25,16 @@ namespace WebBanHang.Controllers
             _hosting = hosting;
         }
         //tra ve giao dien quan ly san pham (co phan trang)
-        public IActionResult Index(int page=1)
+        public IActionResult Index(int page = 1)
         {
             var pageSize = 5;
-            var currentPage = page; 
+            var currentPage = page;
             var dsSanPham = _db.Products.Include(x => x.Category).ToList();
             //truyen du lieu cho View 
             ViewBag.PageSum = Math.Ceiling((double)dsSanPham.Count / pageSize);
             ViewBag.CurrentPage = currentPage;
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                return PartialView("_ProductPartial", dsSanPham.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList());
-            }
-            return View(dsSanPham.Skip((currentPage-1)*pageSize).Take(pageSize).ToList());
+            
+            return View(dsSanPham.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList());
         }
         public IActionResult Delete(int id)
         {
@@ -47,7 +44,7 @@ namespace WebBanHang.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             var sp = _db.Products.Find(id);
-            if (sp.ImageUrl !=null)
+            if (sp.ImageUrl != null)
             {
                 var oldFilePath = Path.Combine(_hosting.WebRootPath, sp.ImageUrl);
                 if (System.IO.File.Exists(oldFilePath))
@@ -73,16 +70,16 @@ namespace WebBanHang.Controllers
         }
         //Xử lý thêm sản phẩm
         [HttpPost]
-        public IActionResult Add(Product p,IFormFile ImageUrl )
+        public IActionResult Add(Product p, IFormFile ImageUrl)
         {
             if (ImageUrl != null)
             {
                 p.ImageUrl = SaveImage(ImageUrl);
             }
-                _db.Products.Add(p);
-                _db.SaveChanges();
-                TempData["success"] = "Product inserted success";
-                return RedirectToAction("Index");
+            _db.Products.Add(p);
+            _db.SaveChanges();
+            TempData["success"] = "Product inserted success";
+            return RedirectToAction("Index");
         }
 
         private string SaveImage(IFormFile image)
@@ -108,34 +105,31 @@ namespace WebBanHang.Controllers
             });
             return View(sp);
         }
-       
+
         [HttpPost]
         public IActionResult Update(Product p, IFormFile ImageUrl)
         {
-            
-                var oldProduct = _db.Products.Find(p.Id);
-                if (ImageUrl != null)
-                {
-                   
-                    p.ImageUrl = SaveImage(ImageUrl);
-                 
-                 }
-               
-                else
-                {
-                    p.ImageUrl = oldProduct.ImageUrl;
-                }
+
+            var oldProduct = _db.Products.Find(p.Id);
+            if (ImageUrl != null)
+            {
+                p.ImageUrl = SaveImage(ImageUrl);
+            }
+            else
+            {
+                p.ImageUrl = oldProduct.ImageUrl;
+            }
             //cập nhật product vào table Product
             oldProduct.Name = p.Name;
             oldProduct.Description = p.Description;
             oldProduct.Price = p.Price;
             oldProduct.CategoryId = p.CategoryId;
             oldProduct.ImageUrl = p.ImageUrl;
-                _db.SaveChanges();
-                TempData["success"] = "Product updated success";
-                return RedirectToAction("Index");
+            _db.SaveChanges();
+            TempData["success"] = "Product updated success";
+            return RedirectToAction("Index");
         }
-            
-        
+
+
     }
 }
