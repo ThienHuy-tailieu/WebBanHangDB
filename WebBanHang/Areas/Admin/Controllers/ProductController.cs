@@ -128,7 +128,5 @@ namespace WebBanHang.Controllers
             TempData["success"] = "Product updated success";
             return RedirectToAction("Index");
         }
-
-
     }
 }
